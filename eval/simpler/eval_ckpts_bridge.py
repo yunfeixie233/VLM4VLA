@@ -11,19 +11,19 @@ import os
 #     )
 # ]
 base_paths = [
-    # "/home/disk1//VLM4VLA/runs/torch_checkpoints_fp32/qwen3vl/bridge_finetune/2025-09-15/bridge_wqy_ckpt_qwen3_4b_qwen3-dense-4b-s3-sft32k-bridgev21actonly_0908_iter_0004000-bs512-lr2e-05-ws1-FCDecoder-latent1"
-    "/home/disk1//VLM4VLA/runs/torch_checkpoints_fp32/qwen3vl/bridge_finetune/2025-09-18/bridge_wqy_ckpt_qwen3_4b_qwen3-dense-4b-s3-sft32k-bridgev21act_gSFT55_0908_iter_0004000-bs512-lr2e-05-ws1-FCDecoder-latent1"
+    "/workspace/ckpts_archive/run_b_all"
 ]
+STEP_FILTER = os.environ.get("STEP_FILTER", "stepstep=0050000")
 ckpt_paths = []
 for base_path in base_paths:
     json_path = [file for file in os.listdir(base_path) if file.endswith(".json")][0]
     ckpt_path = [(os.path.join(base_path, step_file), os.path.join(base_path, json_path))
                  for step_file in os.listdir(base_path)
-                 if step_file.endswith(".pt")]
+                 if step_file.endswith(".pt") and (not STEP_FILTER or STEP_FILTER in step_file)]
     ckpt_paths.extend(ckpt_path)
 
-execute_step = [4, 2, 1]
-device=3
+execute_step = [int(s) for s in os.environ.get("EXEC_STEPS", "4").split(",")]
+device = int(os.environ.get("CUDA_DEV", "0"))
 # execute_step = [1]
 for i, (ckpt, config) in enumerate(ckpt_paths):
     for step in execute_step:

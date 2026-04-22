@@ -20,3 +20,6 @@ wandb/
 .venv/
 venv/
 .env
+
+# eval-time symlink to SimplerEnv asset dir (machine-specific)
+/real_inpainting

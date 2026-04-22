@@ -235,6 +235,7 @@ if __name__ == "__main__":
     args.model_name += f'_{configs["exp_name"]}'
     if args.double_step:
         args.model_name += "double"
+    args.policy_model = configs.get("model", "vlm4vla")
     os.environ["DISPLAY"] = ""
     # prevent a single jax process from taking up all the GPU memory
     os.environ["XLA_PYTHON_CLIENT_PREALLOCATE"] = "false"
